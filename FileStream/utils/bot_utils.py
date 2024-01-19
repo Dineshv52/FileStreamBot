@@ -81,7 +81,7 @@ async def is_user_joined(bot, message: Message):
 
 
 # ---------------------[ PRIVATE GEN LINK + CALLBACK ]---------------------#
-async def shorturl(file_link):
+def shorturl(file_link):
     Short_url = "https://tnshort.net/api?api=86bd6df4bdf3efd9bedeee2ba03c17e33e32978f&url={}".format(
         file_link)
     response = requests.request('GET', Short_url)
