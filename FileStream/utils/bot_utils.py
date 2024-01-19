@@ -92,8 +92,9 @@ def shorturl(file_link, file_name):
             shortened_url = response_data.get('shortenedUrl', None)
             if shortened_url:
                 shortlink = "🚀 Fᴀsᴛ Dᴏᴡɴʟᴏᴀᴅ Lɪɴᴋ 🔗 " + shortened_url
-                full_file_name = file_name + "\n" + shortlink
-                full_file_name = full_file_name +  "\n ➥ ❤️❤❤Jᴏɪɴ : @movies_all_HUb ❤❤❤"
+                full_file_name = file_name + shortlink
+                # full_file_name = full_file_name +  "\n ➥ ❤️❤❤Jᴏɪɴ : @movies_all_HUb ❤❤❤"
+
                 return full_file_name
             else:
                 return file_link
