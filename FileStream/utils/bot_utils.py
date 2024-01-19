@@ -81,7 +81,7 @@ async def is_user_joined(bot, message: Message):
 
 
 # ---------------------[ PRIVATE GEN LINK + CALLBACK ]---------------------#
-def shorturl(file_link):
+def shorturl(file_link, file_name):
     Short_url = "https://tnshort.net/api?api=86bd6df4bdf3efd9bedeee2ba03c17e33e32978f&url={}".format(
         file_link)
     response = requests.request('GET', Short_url)
@@ -91,7 +91,10 @@ def shorturl(file_link):
             response_data = response.json()
             shortened_url = response_data.get('shortenedUrl', None)
             if shortened_url:
-                return shortened_url
+                shortlink = "🚀 Fᴀsᴛ Dᴏᴡɴʟᴏᴀᴅ Lɪɴᴋ 🔗 " + shortened_url
+                full_file_name = file_name + "\n" + shortlink
+                full_file_name = full_file_name + "\n ➥ ❤️❤❤Jᴏɪɴ : @movies_all_HUb ❤❤❤"
+                return full_file_name
             else:
                 return file_link
         except Exception as e:
@@ -110,18 +113,18 @@ async def gen_link(_id):
     stream_link = f"{Server.URL}dl/{_id}"
     file_link = f"https://t.me/{FileStream.username}?start=file_{_id}"
 
-    file_link = shorturl(file_link)
+    file_link = shorturl(file_link, file_name)
 
     if "video" in mime_type:
         stream_text = LANG.STREAM_TEXT.format(file_name, file_size, stream_link, page_link, file_link)
-        reply_markup = InlineKeyboardMarkup(
-            [
-                [InlineKeyboardButton("sᴛʀᴇᴀᴍ", url=page_link), InlineKeyboardButton("ᴅᴏᴡɴʟᴏᴀᴅ", url=stream_link)],
-                [InlineKeyboardButton("ɢᴇᴛ ғɪʟᴇ", url=file_link),
-                 InlineKeyboardButton("ʀᴇᴠᴏᴋᴇ ғɪʟᴇ", callback_data=f"msgdelpvt_{_id}")],
-                [InlineKeyboardButton("ᴄʟᴏsᴇ", callback_data="close")]
-            ]
-        )
+        # reply_markup = InlineKeyboardMarkup(
+        #     [
+        #         [InlineKeyboardButton("sᴛʀᴇᴀᴍ", url=page_link), InlineKeyboardButton("ᴅᴏᴡɴʟᴏᴀᴅ", url=stream_link)],
+        #         [InlineKeyboardButton("ɢᴇᴛ ғɪʟᴇ", url=file_link),
+        #          InlineKeyboardButton("ʀᴇᴠᴏᴋᴇ ғɪʟᴇ", callback_data=f"msgdelpvt_{_id}")],
+        #         [InlineKeyboardButton("ᴄʟᴏsᴇ", callback_data="close")]
+        #     ]
+        # )
     else:
         stream_text = LANG.STREAM_TEXT_X.format(file_name, file_size, stream_link, file_link)
         reply_markup = InlineKeyboardMarkup(

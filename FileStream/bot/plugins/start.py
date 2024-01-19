@@ -14,6 +14,7 @@ import asyncio
 
 db = Database(Telegram.DATABASE_URL, Telegram.SESSION_NAME)
 
+
 @FileStream.on_message(filters.command('start') & filters.private)
 async def start(bot: Client, message: Message):
     if not await verify_user(bot, message):
@@ -81,6 +82,7 @@ async def start(bot: Client, message: Message):
         else:
             await message.reply_text(f"**Invalid Command**")
 
+
 @FileStream.on_message(filters.private & filters.command(["about"]))
 async def start(bot, message):
     if not await verify_user(bot, message):
@@ -98,6 +100,7 @@ async def start(bot, message):
             disable_web_page_preview=True,
             reply_markup=BUTTON.ABOUT_BUTTONS
         )
+
 
 @FileStream.on_message((filters.command('help')) & filters.private)
 async def help_handler(bot, message):
@@ -117,6 +120,7 @@ async def help_handler(bot, message):
             disable_web_page_preview=True,
             reply_markup=BUTTON.HELP_BUTTONS
         )
+
 
 # ---------------------------------------------------------------------------------------------------
 
@@ -145,5 +149,3 @@ async def my_files(bot: Client, message: Message):
     await message.reply_photo(photo=Telegram.FILE_PIC,
                               caption="Total files: {}".format(total_files),
                               reply_markup=InlineKeyboardMarkup(file_list))
-
-
