@@ -100,11 +100,24 @@ def shorturl(file_link):
     else:
         return file_link
 
-# shortlink = "🚀Fᴀsᴛ Dᴏᴡɴʟᴏᴀᴅ Lɪɴᴋ 🔗" + shortened_url
-#                 full_file_name = shortlink + "\n ➥ ❤️❤❤Jᴏɪɴ : @movies_all_HUb ❤❤❤"
+
+def remove_otherword(file_name):
+    modified_message = file_name.replace("dealadda", "")
+    modified_message = modified_message.replace('movieshubmt', '')
+    modified_message = modified_message.replace('@movieshubmt', '')
+    modified_message = modified_message.replace('𝖬𝖠𝖯𝖮𝗋𝗂𝗀𝗂𝗇𝖺𝗅𝗌', '')
+    modified_message = modified_message.replace('@𝖬𝖠𝖯𝖮𝗋𝗂𝗀𝗂𝗇𝖺𝗅𝗌', '')
+    modified_message = modified_message.replace('@Cinemaa_boxoffice', '')
+    modified_message = modified_message.replace('https://k*', '')
+    modified_message = modified_message.replace('https://t.me/*', '')
+    modified_message = modified_message.replace('@TN69Links', '')
+    return modified_message
+
+
 async def gen_link(_id):
     file_info = await db.get_file(_id)
     file_name = file_info['file_name']
+    file_name_without_channel_name = remove_otherword(file_name)
     file_size = humanbytes(file_info['file_size'])
     mime_type = file_info['mime_type']
 
@@ -115,7 +128,7 @@ async def gen_link(_id):
     file_link_new = shorturl(file_link)
 
     if "video" in mime_type:
-        stream_text = LANG.STREAM_TEXT.format(file_name, file_size)
+        stream_text = LANG.STREAM_TEXT.format(file_name_without_channel_name, file_size)
         reply_markup = InlineKeyboardMarkup(
             [
                 [InlineKeyboardButton(" Fast Download Link", url=file_link_new)]
