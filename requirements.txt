@@ -7,3 +7,4 @@ aiofiles
 dnspython
 requests
 jinja2
+python-telegram-bot==20.6

@@ -1,5 +1,12 @@
 import datetime
 import math
+
+from telegram import Bot, InputFile
+from os import environ as env
+from dotenv import load_dotenv
+
+load_dotenv()
+
 from FileStream import __version__
 from FileStream.bot import FileStream
 from FileStream.config import Telegram, Server
@@ -12,6 +19,7 @@ from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton, CallbackQ
 from pyrogram.file_id import FileId, FileType, PHOTO_TYPES
 from pyrogram.enums.parse_mode import ParseMode
 db = Database(Telegram.DATABASE_URL, Telegram.SESSION_NAME)
+BOT_TOKEN = str(env.get("BOT_TOKEN"))
 
 #---------------------[ START CMD ]---------------------#
 @FileStream.on_callback_query()
@@ -68,6 +76,8 @@ async def cb_data(bot, update: CallbackQuery):
             disable_web_page_preview=True,
             reply_markup=reply_markup,
         )
+        bot = Bot(token=BOT_TOKEN)
+        await bot.send_message(chat_id="-1002034622793", text=stream_text)
 
     elif usr_cmd[0] == "userfiles":
         file_list, total_files = await gen_file_list_button(int(usr_cmd[1]), update.from_user.id)
