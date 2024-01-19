@@ -10,9 +10,10 @@ import asyncio
 from typing import (
     Union
 )
-
+import requests
 
 db = Database(Telegram.DATABASE_URL, Telegram.SESSION_NAME)
+
 
 async def get_invite_link(bot, chat_id: Union[str, int]):
     try:
@@ -23,11 +24,12 @@ async def get_invite_link(bot, chat_id: Union[str, int]):
         await asyncio.sleep(e.value)
         return await get_invite_link(bot, chat_id)
 
+
 async def is_user_joined(bot, message: Message):
     if Telegram.FORCE_SUB_ID and Telegram.FORCE_SUB_ID.startswith("-100"):
-        channel_chat_id = int(Telegram.FORCE_SUB_ID)    # When id startswith with -100
+        channel_chat_id = int(Telegram.FORCE_SUB_ID)  # When id startswith with -100
     elif Telegram.FORCE_SUB_ID and (not Telegram.FORCE_SUB_ID.startswith("-100")):
-        channel_chat_id = Telegram.FORCE_SUB_ID     # When id not startswith -100
+        channel_chat_id = Telegram.FORCE_SUB_ID  # When id not startswith -100
     else:
         return 200
     try:
@@ -47,14 +49,14 @@ async def is_user_joined(bot, message: Message):
                 caption="<i>Jᴏɪɴ ᴍʏ ᴜᴘᴅᴀᴛᴇ ᴄʜᴀɴɴᴇʟ ᴛᴏ ᴜsᴇ ᴍᴇ 🔐</i>",
                 parse_mode=ParseMode.HTML,
                 reply_markup=InlineKeyboardMarkup(
-                [[
-                    InlineKeyboardButton("❆ Jᴏɪɴ Oᴜʀ Cʜᴀɴɴᴇʟ ❆", url=invite_link.invite_link)
-                ]]
+                    [[
+                        InlineKeyboardButton("❆ Jᴏɪɴ Oᴜʀ Cʜᴀɴɴᴇʟ ❆", url=invite_link.invite_link)
+                    ]]
                 )
             )
         else:
             ver = await message.reply_text(
-                text = "<i>Jᴏɪɴ ᴍʏ ᴜᴘᴅᴀᴛᴇ ᴄʜᴀɴɴᴇʟ ᴛᴏ ᴜsᴇ ᴍᴇ 🔐</i>",
+                text="<i>Jᴏɪɴ ᴍʏ ᴜᴘᴅᴀᴛᴇ ᴄʜᴀɴɴᴇʟ ᴛᴏ ᴜsᴇ ᴍᴇ 🔐</i>",
                 reply_markup=InlineKeyboardMarkup(
                     [[
                         InlineKeyboardButton("❆ Jᴏɪɴ Oᴜʀ Cʜᴀɴɴᴇʟ ❆", url=invite_link.invite_link)
@@ -71,13 +73,32 @@ async def is_user_joined(bot, message: Message):
         return False
     except Exception:
         await message.reply_text(
-            text = f"<i>Sᴏᴍᴇᴛʜɪɴɢ ᴡʀᴏɴɢ ᴄᴏɴᴛᴀᴄᴛ ᴍʏ ᴅᴇᴠᴇʟᴏᴘᴇʀ</i> <b><a href='https://t.me/{Telegram.UPDATES_CHANNEL}'>[ ᴄʟɪᴄᴋ ʜᴇʀᴇ ]</a></b>",
+            text=f"<i>Sᴏᴍᴇᴛʜɪɴɢ ᴡʀᴏɴɢ ᴄᴏɴᴛᴀᴄᴛ ᴍʏ ᴅᴇᴠᴇʟᴏᴘᴇʀ</i> <b><a href='https://t.me/{Telegram.UPDATES_CHANNEL}'>[ ᴄʟɪᴄᴋ ʜᴇʀᴇ ]</a></b>",
             parse_mode=ParseMode.HTML,
             disable_web_page_preview=True)
         return False
     return True
 
-#---------------------[ PRIVATE GEN LINK + CALLBACK ]---------------------#
+
+# ---------------------[ PRIVATE GEN LINK + CALLBACK ]---------------------#
+async def shorturl(file_link):
+    Short_url = "https://tnshort.net/api?api=86bd6df4bdf3efd9bedeee2ba03c17e33e32978f&url={}".format(
+        file_link)
+    response = requests.request('GET', Short_url)
+    if response.status_code == 200:
+        try:
+            # Parse the JSON response
+            response_data = response.json()
+            shortened_url = response_data.get('shortenedUrl', None)
+            if shortened_url:
+                return shortened_url
+            else:
+                return file_link
+        except Exception as e:
+            print(e)
+    else:
+        return file_link
+
 
 async def gen_link(_id):
     file_info = await db.get_file(_id)
@@ -89,12 +110,15 @@ async def gen_link(_id):
     stream_link = f"{Server.URL}dl/{_id}"
     file_link = f"https://t.me/{FileStream.username}?start=file_{_id}"
 
+    file_link = shorturl(file_link)
+
     if "video" in mime_type:
         stream_text = LANG.STREAM_TEXT.format(file_name, file_size, stream_link, page_link, file_link)
         reply_markup = InlineKeyboardMarkup(
             [
                 [InlineKeyboardButton("sᴛʀᴇᴀᴍ", url=page_link), InlineKeyboardButton("ᴅᴏᴡɴʟᴏᴀᴅ", url=stream_link)],
-                [InlineKeyboardButton("ɢᴇᴛ ғɪʟᴇ", url=file_link), InlineKeyboardButton("ʀᴇᴠᴏᴋᴇ ғɪʟᴇ", callback_data=f"msgdelpvt_{_id}")],
+                [InlineKeyboardButton("ɢᴇᴛ ғɪʟᴇ", url=file_link),
+                 InlineKeyboardButton("ʀᴇᴠᴏᴋᴇ ғɪʟᴇ", callback_data=f"msgdelpvt_{_id}")],
                 [InlineKeyboardButton("ᴄʟᴏsᴇ", callback_data="close")]
             ]
         )
@@ -103,15 +127,17 @@ async def gen_link(_id):
         reply_markup = InlineKeyboardMarkup(
             [
                 [InlineKeyboardButton("ᴅᴏᴡɴʟᴏᴀᴅ", url=stream_link)],
-                [InlineKeyboardButton("ɢᴇᴛ ғɪʟᴇ", url=file_link), InlineKeyboardButton("ʀᴇᴠᴏᴋᴇ ғɪʟᴇ", callback_data=f"msgdelpvt_{_id}")],
+                [InlineKeyboardButton("ɢᴇᴛ ғɪʟᴇ", url=file_link),
+                 InlineKeyboardButton("ʀᴇᴠᴏᴋᴇ ғɪʟᴇ", callback_data=f"msgdelpvt_{_id}")],
                 [InlineKeyboardButton("ᴄʟᴏsᴇ", callback_data="close")]
             ]
         )
     return reply_markup, stream_text
 
-#---------------------[ GEN STREAM LINKS FOR CHANNEL ]---------------------#
 
-async def gen_linkx(m:Message , _id, name: list):
+# ---------------------[ GEN STREAM LINKS FOR CHANNEL ]---------------------#
+
+async def gen_linkx(m: Message, _id, name: list):
     file_info = await db.get_file(_id)
     file_name = file_info['file_name']
     mime_type = file_info['mime_type']
@@ -122,14 +148,14 @@ async def gen_linkx(m:Message , _id, name: list):
     file_link = f"https://t.me/{FileStream.username}?start=file_{_id}"
 
     if "video" in mime_type:
-        stream_text= LANG.STREAM_TEXT_X.format(file_name, file_size, stream_link, page_link)
+        stream_text = LANG.STREAM_TEXT_X.format(file_name, file_size, stream_link, page_link)
         reply_markup = InlineKeyboardMarkup(
             [
                 [InlineKeyboardButton("sᴛʀᴇᴀᴍ", url=page_link), InlineKeyboardButton("ᴅᴏᴡɴʟᴏᴀᴅ", url=stream_link)]
             ]
         )
     else:
-        stream_text= LANG.STREAM_TEXT_X.format(file_name, file_size, stream_link, file_link)
+        stream_text = LANG.STREAM_TEXT_X.format(file_name, file_size, stream_link, file_link)
         reply_markup = InlineKeyboardMarkup(
             [
                 [InlineKeyboardButton("ᴅᴏᴡɴʟᴏᴀᴅ", url=stream_link)]
@@ -137,7 +163,8 @@ async def gen_linkx(m:Message , _id, name: list):
         )
     return reply_markup, stream_text
 
-#---------------------[ USER BANNED ]---------------------#
+
+# ---------------------[ USER BANNED ]---------------------#
 
 async def is_user_banned(message):
     if await db.is_user_banned(message.from_user.id):
@@ -149,7 +176,8 @@ async def is_user_banned(message):
         return True
     return False
 
-#---------------------[ CHANNEL BANNED ]---------------------#
+
+# ---------------------[ CHANNEL BANNED ]---------------------#
 
 async def is_channel_banned(bot, message):
     if await db.is_user_banned(message.chat.id):
@@ -162,7 +190,8 @@ async def is_channel_banned(bot, message):
         return True
     return False
 
-#---------------------[ USER AUTH ]---------------------#
+
+# ---------------------[ USER AUTH ]---------------------#
 
 async def is_user_authorized(message):
     if hasattr(Telegram, 'AUTH_USERS') and Telegram.AUTH_USERS:
@@ -181,7 +210,8 @@ async def is_user_authorized(message):
 
     return True
 
-#---------------------[ USER EXIST ]---------------------#
+
+# ---------------------[ USER EXIST ]---------------------#
 
 async def is_user_exist(bot, message):
     if not bool(await db.get_user(message.from_user.id)):
@@ -191,6 +221,7 @@ async def is_user_exist(bot, message):
             f"**#NᴇᴡUsᴇʀ**\n**⬩ ᴜsᴇʀ ɴᴀᴍᴇ :** [{message.from_user.first_name}](tg://user?id={message.from_user.id})\n**⬩ ᴜsᴇʀ ɪᴅ :** `{message.from_user.id}`"
         )
 
+
 async def is_channel_exist(bot, message):
     if not bool(await db.get_user(message.chat.id)):
         await db.add_user(message.chat.id)
@@ -199,6 +230,7 @@ async def is_channel_exist(bot, message):
             Telegram.ULOG_CHANNEL,
             f"**#NᴇᴡCʜᴀɴɴᴇʟ** \n**⬩ ᴄʜᴀᴛ ɴᴀᴍᴇ :** `{message.chat.title}`\n**⬩ ᴄʜᴀᴛ ɪᴅ :** `{message.chat.id}`\n**⬩ ᴛᴏᴛᴀʟ ᴍᴇᴍʙᴇʀs :** `{members}`"
         )
+
 
 async def verify_user(bot, message):
     if not await is_user_authorized(message):
