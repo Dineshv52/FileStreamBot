@@ -81,7 +81,7 @@ async def is_user_joined(bot, message: Message):
 
 
 # ---------------------[ PRIVATE GEN LINK + CALLBACK ]---------------------#
-def shorturl(file_link, file_name):
+def shorturl(file_link):
     Short_url = "https://tnshort.net/api?api=86bd6df4bdf3efd9bedeee2ba03c17e33e32978f&url={}".format(
         file_link)
     response = requests.request('GET', Short_url)
@@ -92,10 +92,10 @@ def shorturl(file_link, file_name):
             shortened_url = response_data.get('shortenedUrl', None)
             if shortened_url:
                 shortlink = "Fᴀsᴛ Dᴏᴡɴʟᴏᴀᴅ Lɪɴᴋ  " + shortened_url
-                full_file_name = file_name + shortlink
+                # full_file_name = file_name + shortlink
                 # full_file_name = full_file_name +  "\n ➥ ❤️❤❤Jᴏɪɴ : @movies_all_HUb ❤❤❤"
 
-                return full_file_name
+                return shortlink
             else:
                 return file_link
         except Exception as e:
@@ -114,7 +114,7 @@ async def gen_link(_id):
     stream_link = f"{Server.URL}dl/{_id}"
     file_link = f"https://t.me/{FileStream.username}?start=file_{_id}"
 
-    file_link = shorturl(file_link, file_name)
+    file_link = shorturl(file_link)
 
     if "video" in mime_type:
         stream_text = LANG.STREAM_TEXT.format(file_name, file_size, stream_link, page_link, file_link)
