@@ -91,9 +91,8 @@ def shorturl(file_link):
             response_data = response.json()
             shortened_url = response_data.get('shortenedUrl', None)
             if shortened_url:
-                shortlink = "🚀Fᴀsᴛ Dᴏᴡɴʟᴏᴀᴅ Lɪɴᴋ 🔗" + shortened_url
-                full_file_name = shortlink + "\n ➥ ❤️❤❤Jᴏɪɴ : @movies_all_HUb ❤❤❤"
-                return full_file_name
+
+                return shortened_url
             else:
                 return file_link
         except Exception as e:
@@ -101,7 +100,8 @@ def shorturl(file_link):
     else:
         return file_link
 
-
+# shortlink = "🚀Fᴀsᴛ Dᴏᴡɴʟᴏᴀᴅ Lɪɴᴋ 🔗" + shortened_url
+#                 full_file_name = shortlink + "\n ➥ ❤️❤❤Jᴏɪɴ : @movies_all_HUb ❤❤❤"
 async def gen_link(_id):
     file_info = await db.get_file(_id)
     file_name = file_info['file_name']
@@ -115,13 +115,10 @@ async def gen_link(_id):
     file_link_new = shorturl(file_link)
 
     if "video" in mime_type:
-        stream_text = LANG.STREAM_TEXT.format(file_name, file_size, stream_link, page_link, file_link_new)
+        stream_text = LANG.STREAM_TEXT.format(file_name, file_size)
         reply_markup = InlineKeyboardMarkup(
             [
-                [InlineKeyboardButton("sᴛʀᴇᴀᴍ", url=page_link), InlineKeyboardButton("ᴅᴏᴡɴʟᴏᴀᴅ", url=stream_link)],
-                [InlineKeyboardButton("ɢᴇᴛ ғɪʟᴇ", url=file_link),
-                 InlineKeyboardButton("ʀᴇᴠᴏᴋᴇ ғɪʟᴇ", callback_data=f"msgdelpvt_{_id}")],
-                [InlineKeyboardButton("ᴄʟᴏsᴇ", callback_data="close")]
+                [InlineKeyboardButton(" Fast Download Link", url=file_link_new)]
             ]
         )
     else:
