@@ -1,1 +1,1 @@
-worker: python -m FileStream
+web: python -m FileStream
