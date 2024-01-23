@@ -126,12 +126,16 @@ async def gen_link(_id):
     file_link = f"https://t.me/{FileStream.username}?start=file_{_id}"
 
     file_link_new = shorturl(file_link)
+    Download_link_new = shorturl(page_link)
+    Stream_link_new = shorturl(stream_link)
 
     if "video" in mime_type:
         stream_text = LANG.STREAM_TEXT.format(file_name_without_channel_name, file_size)
         reply_markup = InlineKeyboardMarkup(
             [
-                [InlineKeyboardButton(" Fast Download Link", url=file_link_new)]
+                [InlineKeyboardButton("Filter Bot Link", url=file_link_new)],
+                [InlineKeyboardButton("Fast Download link", url=Download_link_new),
+                 InlineKeyboardButton("Stream link", url=stream_link)]
             ]
         )
     else:

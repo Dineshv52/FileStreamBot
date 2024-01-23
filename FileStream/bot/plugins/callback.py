@@ -76,8 +76,8 @@ async def cb_data(bot, update: CallbackQuery):
             disable_web_page_preview=True,
             reply_markup=reply_markup,
         )
-        bot = Bot(token=BOT_TOKEN)
-        await bot.send_message(chat_id="-1002034622793", text=stream_text)
+        # bot = Bot(token=BOT_TOKEN)
+        # await bot.send_message(chat_id="-1002034622793", text=stream_text)
 
     elif usr_cmd[0] == "userfiles":
         file_list, total_files = await gen_file_list_button(int(usr_cmd[1]), update.from_user.id)
