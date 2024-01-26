@@ -124,8 +124,9 @@ async def gen_link(_id):
     stream_link = f"{Server.URL}watch/{_id}"
     Download_link = f"{Server.URL}dl/{_id}"
     file_link = f"https://t.me/{FileStream.username}?start=file_{_id}"
+    Youtube_link = "https://www.youtube.com/watch?v=gXomsw5nogo"
 
-    file_link_new = shorturl(file_link)
+    # file_link_new = shorturl(file_link)
     Download_link_new = shorturl(Download_link)
     print(Download_link_new)
     Stream_link_new = shorturl(stream_link)
@@ -135,9 +136,10 @@ async def gen_link(_id):
         stream_text = LANG.STREAM_TEXT.format(file_name_without_channel_name, file_size)
         reply_markup = InlineKeyboardMarkup(
             [
-                [InlineKeyboardButton("Filter Bot Link", url=file_link_new)],
+                [InlineKeyboardButton("Filter Bot Link(Without Ads)", url=file_link)],
                 [InlineKeyboardButton("Fast Download link", url=Download_link_new),
-                 InlineKeyboardButton("Stream link", url=Stream_link_new)]
+                 InlineKeyboardButton("Stream link", url=Stream_link_new)],
+                [InlineKeyboardButton("How to download via Fast link", url=Youtube_link)]
             ]
         )
     else:
