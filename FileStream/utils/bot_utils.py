@@ -113,7 +113,8 @@ def remove_otherword(file_name):
     modified_message = modified_message.replace('https://mdisk.info/*', '')
     modified_message = modified_message.replace('@TN69Links', '')
     modified_message = modified_message.replace('@*', '')
-    modified_message = modified_message + "Main Channel @movies_all_HUb and backup channel @PandaSupportgroup"
+    modified_message = modified_message + "\n \n"
+    modified_message = modified_message + "❤️Jᴏɪɴ : Main Channel @movies_all_HUb and backup channel @PandaSupportgroup"
     return modified_message
 
 
