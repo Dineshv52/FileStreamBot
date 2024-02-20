@@ -110,7 +110,9 @@ def remove_otherword(file_name):
     modified_message = modified_message.replace('@Cinemaa_boxoffice', '')
     modified_message = modified_message.replace('https://k*', '')
     modified_message = modified_message.replace('https://t.me/*', '')
+    modified_message = modified_message.replace('https://mdisk.info/*', '')
     modified_message = modified_message.replace('@TN69Links', '')
+    modified_message = modified_message.replace('@*', '')
     modified_message = modified_message + "Main Channel @movies_all_HUb and backup channel @PandaSupportgroup"
     return modified_message
 
@@ -166,18 +168,30 @@ async def gen_link(_id):
 async def gen_linkx(m: Message, _id, name: list):
     file_info = await db.get_file(_id)
     file_name = file_info['file_name']
+    file_name = remove_otherword(file_name)
     mime_type = file_info['mime_type']
     file_size = humanbytes(file_info['file_size'])
+    Youtube_link = Telegram.Youtube_link
 
     page_link = f"{Server.URL}watch/{_id}"
     stream_link = f"{Server.URL}dl/{_id}"
     file_link = f"https://t.me/{FileStream.username}?start=file_{_id}"
+    if Telegram.SHORTERN_ENABLED:
+        stream_link = shorturl(stream_link)
+        print(stream_link)
+        stream_link = shorturl(stream_link)
+        print(stream_link)
+        page_link = shorturl(page_link)
+        print(page_link)
+    else:
+        print("ShortUrl disabled")
 
     if "video" in mime_type:
         stream_text = LANG.STREAM_TEXT_X.format(file_name, file_size, stream_link, page_link)
         reply_markup = InlineKeyboardMarkup(
             [
-                [InlineKeyboardButton("sᴛʀᴇᴀᴍ", url=page_link), InlineKeyboardButton("ᴅᴏᴡɴʟᴏᴀᴅ", url=stream_link)]
+                [InlineKeyboardButton("sᴛʀᴇᴀᴍ", url=page_link), InlineKeyboardButton("ᴅᴏᴡɴʟᴏᴀᴅ", url=stream_link)],
+                [InlineKeyboardButton("How to download via Fast link", url=Youtube_link)]
             ]
         )
 
@@ -185,7 +199,8 @@ async def gen_linkx(m: Message, _id, name: list):
         stream_text = LANG.STREAM_TEXT_X.format(file_name, file_size, stream_link, file_link)
         reply_markup = InlineKeyboardMarkup(
             [
-                [InlineKeyboardButton("ᴅᴏᴡɴʟᴏᴀᴅ", url=stream_link)]
+                [InlineKeyboardButton("ᴅᴏᴡɴʟᴏᴀᴅ", url=stream_link)],
+                [InlineKeyboardButton("How to download via Fast link", url=Youtube_link)]
             ]
         )
     return reply_markup, stream_text
