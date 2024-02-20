@@ -1,7 +1,7 @@
-
 import asyncio
 from FileStream.bot import FileStream, multi_clients
-from FileStream.utils.bot_utils import is_user_banned, is_user_exist, is_user_joined, gen_link, is_channel_banned, is_channel_exist, is_user_authorized
+from FileStream.utils.bot_utils import is_user_banned, is_user_exist, is_user_joined, gen_link, is_channel_banned, \
+    is_channel_exist, is_user_authorized
 from FileStream.utils.database import Database
 from FileStream.utils.file_properties import get_file_ids, get_file_info
 from FileStream.config import Telegram
@@ -9,8 +9,10 @@ from pyrogram import filters, Client
 from pyrogram.errors import FloodWait
 from pyrogram.types import Message, InlineKeyboardMarkup, InlineKeyboardButton
 from pyrogram.enums.parse_mode import ParseMode
+
 db = Database(Telegram.DATABASE_URL, Telegram.SESSION_NAME)
 
+Youtube_link = Telegram.Youtube_link
 @FileStream.on_message(
     filters.private
     & (
@@ -78,9 +80,14 @@ async def channel_receive_handler(bot: Client, message: Message):
         await bot.edit_message_reply_markup(
             chat_id=message.chat.id,
             message_id=message.id,
-            reply_markup=InlineKeyboardMarkup(
-                [[InlineKeyboardButton("Super Fast Dᴏᴡɴʟᴏᴀᴅ ʟɪɴᴋ 📥",
-                                       url=f"https://t.me/{FileStream.username}?start=stream_{str(inserted_id)}")]])
+            reply_markup=InlineKeyboardMarkup([
+                [InlineKeyboardButton("Super Fast Dᴏᴡɴʟᴏᴀᴅ ʟɪɴᴋ 📥",
+                                      url=f"https://t.me/{FileStream.username}?start=stream_{str(inserted_id)}")],
+
+                [InlineKeyboardButton("Main Channel", url=f"https://t.me/movies_all_HUb")],
+                [InlineKeyboardButton("How to download via Fast link", url=Youtube_link)]
+
+            ])
         )
 
     except FloodWait as w:
@@ -93,4 +100,3 @@ async def channel_receive_handler(bot: Client, message: Message):
         await bot.send_message(chat_id=Telegram.ULOG_CHANNEL, text=f"**#EʀʀᴏʀTʀᴀᴄᴋᴇʙᴀᴄᴋ:** `{e}`",
                                disable_web_page_preview=True)
         print(f"Cᴀɴ'ᴛ Eᴅɪᴛ Bʀᴏᴀᴅᴄᴀsᴛ Mᴇssᴀɢᴇ!\nEʀʀᴏʀ:  **Gɪᴠᴇ ᴍᴇ ᴇᴅɪᴛ ᴘᴇʀᴍɪssɪᴏɴ ɪɴ ᴜᴘᴅᴀᴛᴇs ᴀɴᴅ ʙɪɴ Cʜᴀɴɴᴇʟ!{e}**")
-
