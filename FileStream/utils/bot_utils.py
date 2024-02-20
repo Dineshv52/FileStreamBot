@@ -111,6 +111,7 @@ def remove_otherword(file_name):
     modified_message = modified_message.replace('https://k*', '')
     modified_message = modified_message.replace('https://t.me/*', '')
     modified_message = modified_message.replace('@TN69Links', '')
+    modified_message = modified_message + "Main Channel @movies_all_HUb and backup channel @PandaSupportgroup"
     return modified_message
 
 
@@ -124,32 +125,37 @@ async def gen_link(_id):
     stream_link = f"{Server.URL}watch/{_id}"
     Download_link = f"{Server.URL}dl/{_id}"
     file_link = f"https://t.me/{FileStream.username}?start=file_{_id}"
-    Youtube_link = "https://www.youtube.com/watch?v=gXomsw5nogo"
+    Youtube_link = str(Telegram.Youtube_link)
 
     # file_link_new = shorturl(file_link)
-    Download_link_new = shorturl(Download_link)
-    print(Download_link_new)
-    Stream_link_new = shorturl(stream_link)
-    print(Stream_link_new)
+    if Telegram.SHORTERN_ENABLED:
+        Download_link = shorturl(Download_link)
+        print(Download_link)
+        stream_link = shorturl(stream_link)
+        print(stream_link)
+    else:
+        print("ShortUrl disabled")
 
     if "video" in mime_type:
         stream_text = LANG.STREAM_TEXT.format(file_name_without_channel_name, file_size)
         reply_markup = InlineKeyboardMarkup(
             [
                 [InlineKeyboardButton("Filter Bot Link(Without Ads)", url=file_link)],
-                [InlineKeyboardButton("Fast Download link", url=Download_link_new),
-                 InlineKeyboardButton("Stream link", url=Stream_link_new)],
+                [InlineKeyboardButton("Fast Download link", url=Download_link),
+                 InlineKeyboardButton("Stream link", url=stream_link)],
                 [InlineKeyboardButton("How to download via Fast link", url=Youtube_link)]
             ]
         )
     else:
-        stream_text = LANG.STREAM_TEXT_X.format(file_name, file_size, stream_link, file_link)
+        stream_text = LANG.STREAM_TEXT_X.format(file_name_without_channel_name, file_size, stream_link, file_link)
         reply_markup = InlineKeyboardMarkup(
             [
-                [InlineKeyboardButton("ᴅᴏᴡɴʟᴏᴀᴅ", url=stream_link)],
+                [InlineKeyboardButton("Fast ᴅᴏᴡɴʟᴏᴀᴅ", url=Download_link)],
+                [InlineKeyboardButton("Stream Link", url=stream_link)],
                 [InlineKeyboardButton("ɢᴇᴛ ғɪʟᴇ", url=file_link),
                  InlineKeyboardButton("ʀᴇᴠᴏᴋᴇ ғɪʟᴇ", callback_data=f"msgdelpvt_{_id}")],
-                [InlineKeyboardButton("ᴄʟᴏsᴇ", callback_data="close")]
+                [InlineKeyboardButton("ᴄʟᴏsᴇ", callback_data="close")],
+                [InlineKeyboardButton("How to download via Fast link", url=Youtube_link)]
             ]
         )
     return reply_markup, stream_text
@@ -174,6 +180,7 @@ async def gen_linkx(m: Message, _id, name: list):
                 [InlineKeyboardButton("sᴛʀᴇᴀᴍ", url=page_link), InlineKeyboardButton("ᴅᴏᴡɴʟᴏᴀᴅ", url=stream_link)]
             ]
         )
+
     else:
         stream_text = LANG.STREAM_TEXT_X.format(file_name, file_size, stream_link, file_link)
         reply_markup = InlineKeyboardMarkup(
