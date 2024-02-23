@@ -143,7 +143,7 @@ async def gen_link(_id):
         stream_text = LANG.STREAM_TEXT.format(file_name_without_channel_name, file_size)
         reply_markup = InlineKeyboardMarkup(
             [
-                [InlineKeyboardButton("Filter Bot Link(Without Ads)", url=file_link)],
+                [InlineKeyboardButton("Click to Download", url=file_link)],
                 [InlineKeyboardButton("Fast Download link", url=Download_link),
                  InlineKeyboardButton("Stream link", url=stream_link)],
                 [InlineKeyboardButton("How to download via Fast link", url=Youtube_link)]
@@ -155,7 +155,7 @@ async def gen_link(_id):
             [
                 [InlineKeyboardButton("Fast ᴅᴏᴡɴʟᴏᴀᴅ", url=Download_link)],
                 [InlineKeyboardButton("Stream Link", url=stream_link)],
-                [InlineKeyboardButton("ɢᴇᴛ ғɪʟᴇ", url=file_link),
+                [InlineKeyboardButton("Click to Download", url=file_link),
                  InlineKeyboardButton("ʀᴇᴠᴏᴋᴇ ғɪʟᴇ", callback_data=f"msgdelpvt_{_id}")],
                 [InlineKeyboardButton("ᴄʟᴏsᴇ", callback_data="close")],
                 [InlineKeyboardButton("How to download via Fast link", url=Youtube_link)]
