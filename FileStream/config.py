@@ -26,7 +26,7 @@ class Telegram:
     SECONDARY = True if MODE.lower() == "secondary" else False
     AUTH_USERS = list(set(int(x) for x in str(env.get("AUTH_USERS", "")).split()))
     SHORTERN_ENABLED = env.get("SHORTERN_ENABLED", None)
-    Youtube_link = env.get("YOUTUBE_LINK", "https://www.youtube.com/watch?v=gXomsw5nogo")
+    Youtube_link = env.get("YOUTUBE_LINK", "https://www.youtube.com/watch?v=8V3sL4kr4KI")
 
 class Server:
     PORT = int(env.get("PORT", 8080))
